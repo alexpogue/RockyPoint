@@ -70,6 +70,9 @@ void printInt(Position at, int val) {
 		char t = buf[left];
 		buf[left] = buf[right];
 		buf[right] = t;
+
+		left++;
+		right--;
 	}
 
 	printStr(at, buf);
