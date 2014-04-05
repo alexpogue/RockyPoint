@@ -21,7 +21,7 @@ LIBOBJS := $(wildcard $(TOOLCHAIN)/arg-agb-elf/*.o)
 OUTELF := $(OUTDIR)/RockyPoint.elf
 OUTROM := $(OUTDIR)/RockyPoint.gba
 
-CFLAGS := -Werror -Wall
+CFLAGS := -Werror -Wall -std=c99
 LDFLAGS := -o $(OUTDIR)/RockyPoint.elf
 
 CC := $(BIN)/gcc
