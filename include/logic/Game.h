@@ -1,7 +1,11 @@
 #ifndef GAME_H
 #define GAME_H
 
+#include <stdbool.h>
 #include "logic/Entity.h"
+
+#define GRID_WIDTH 30
+#define GRID_HEIGHT 20
 
 void initializeGame();
 
@@ -10,7 +14,7 @@ int getHeight();
 
 Entity getEntityAt(Position);
 
-void move(Entity, Position);
+ move(Entity, Position);
 void endTurn();
 
 
