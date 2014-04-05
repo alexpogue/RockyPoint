@@ -96,5 +96,3 @@ void moveZomibe(Entity z){
 	}
 	move(z,p);
 }
-
-//;)
