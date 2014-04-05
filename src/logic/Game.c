@@ -35,9 +35,7 @@ bool move(Entity c, Position p){
 		return false;
 	}
 }
-void endTurn(){
 
-}
 unsigned int calculateNumMoves(Position c, Position p, ActionPoint a){
 	unsigned int i = 0;
 	while((c.x != p.x && c.y != p.y)|| i > a){
@@ -62,6 +60,41 @@ unsigned int calculateNumMoves(Position c, Position p, ActionPoint a){
 		}
 	}
 	return i;
+}
+
+
+void endTurn(){
+	unsigned int i, j;
+	for(i = 0; i < GRID_WIDTH; i++){
+		for(j=0; j<GRID_HEIGHT;j++){
+			if(grid[i][j] != NULL){
+				if(grid[i][j]->type == ET_ZOMBIE){
+					move(grid[i][j]);
+
+				}
+				grid[i][j]->remainingPoints = MAX_ACTION_POINTS[grid[i][j]->type];
+
+			}
+		}
+	}
+
+}
+void moveZomibe(Entity z){
+	int r = rand()*4>>15;
+	Position p = z->position;
+	if(r == 0){
+		p.x--;
+	}
+	else if(r==1){
+		p.y++;
+	}
+	else if(r==2){
+		p.x++;
+	}
+	else{
+		p.y--;
+	}
+	move(z,p);
 }
 
 //;)
