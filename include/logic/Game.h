@@ -6,11 +6,9 @@
 
 #define GRID_WIDTH 30
 #define GRID_HEIGHT 20
+#define MAX_ENTITIES ( GRID_WIDTH * GRID_HEIGHT )
 
 void initializeGame();
-
-int getWidth();
-int getHeight();
 
 Entity getEntityAt(Position);
 
