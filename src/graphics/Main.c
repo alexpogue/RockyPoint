@@ -9,7 +9,9 @@
 #define VIDMEM_OFF(x, y) ( ( x ) + ( ( y ) * NUM_COLS ) )
 #define RGB16(r, g, b) ( ( r ) + ( ( g ) << 5 ) + ( ( b ) << 10 ) )
 #define REG_DISPCNT *(unsigned int*)0x4000000
-#define MODE_1 0x1
+#define REG_BG0CNT *(unsigned short*)0x04000008
+#define REG_BG1CNT *(unsigned short*)0x0400000C
+#define MODE_0 0x0
 #define BG1_ENABLE 0x200
 #define BG2_ENABLE 0x400
 #define SPRITES_ENABLE 0x1000
@@ -26,6 +28,20 @@ typedef struct {
 	char R      : 1;
 	char L      : 1;
 } KEY_MAP __attribute__((packed));
+
+typedef union {
+	struct {
+		char PR    : 2;
+		char CBB   : 2;
+		char       : 2;
+		char MOS   : 1;
+		char CM    : 1;
+		char SBB   : 5;
+		char WR    : 1;
+		char SZ    : 2;
+	} REGISTER_BITS __attribute__((packed));
+	unsigned short REGISTER_VAL;
+} BKG_CNT;
 
 KEY_MAP KEYS;
 
@@ -49,7 +65,19 @@ void clearScreen() {
 
 int main() {
 	int x, y, prevX, prevY;
-	REG_DISPCNT = MODE_1 | BG1_ENABLE | BG2_ENABLE | SPRITES_ENABLE;
+	REG_DISPCNT = MODE_0 | BG1_ENABLE | BG2_ENABLE | SPRITES_ENABLE;
+
+	BKG_CNT bkgCnt;
+	// for background layer
+	bkgCnt.REGISTER_VAL = 0;
+	bkgCnt.REGISTER_BITS.CM = 1;
+	bkgCnt.REGISTER_BITS.SBB = 8;
+	REG_BG0CNT = bkgCnt.REGISTER_VAL;
+
+	// for sprite layer
+	bkgCnt.REGISTER_BITS.PR = 1;
+	bkgCnt.REGISTER_BITS.SBB = 9;
+	REG_BG1CNT = bkgCnt.REGISTER_VAL;
 }
 
 void pollKeys() {
