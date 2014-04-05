@@ -14,7 +14,7 @@ int getHeight();
 
 Entity getEntityAt(Position);
 
- move(Entity, Position);
+bool move(Entity, Position);
 void endTurn();
 
 
