@@ -59,15 +59,14 @@ void printStr(Position at, char *str) {
 	}
 }
 
-void printInt(Position at, int val) {
+void printInt(Position at, signed int val) {
 	char buf[34];
 	int right = 0;
 	int left = 0;
 
 	if(val < 0) {
-		buf[left] = '-';
-		left++;
-		right++;
+		printStr(at, "-");
+		at.x++;
 
 		val = -val;
 	}

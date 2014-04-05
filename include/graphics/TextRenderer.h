@@ -12,7 +12,7 @@
 
 void printStr(Position at, char *str);
 
-void printInt(Position at, int val);
+void printInt(Position at, signed int val);
 
 void clearCharacterLayer();
 

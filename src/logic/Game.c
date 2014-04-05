@@ -14,7 +14,7 @@ Entity createZombie(Position p);
 Entity createSurvivor(Position p);
 bool addNewZombie();
 bool addNewSurvivor();
-int score;
+signed int score;
 GameState getGameState() {
 	return CurState;
 }
