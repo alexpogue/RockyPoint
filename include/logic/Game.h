@@ -3,10 +3,14 @@
 
 #include "logic/Entity.h"
 
-Entity getEntityAt(Position);
-void move(Entity, Position);
+void initializeGame();
+
 int getWidth();
 int getHeight();
+
+Entity getEntityAt(Position);
+
+void move(Entity, Position);
 void endTurn();
 
 
