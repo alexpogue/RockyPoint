@@ -24,57 +24,77 @@ void handleKeyA(KeyEvent);
 void handleKeyB(KeyEvent);
 void handleKeyStart(KeyEvent);
 
+void handleAllKeys(KeyEvent);
+
 void validateCursor();
 
 void drawScreen();
 
 int main() {
-	Background bkgCnt;
-	// for background layer
-	bkgCnt.priority = 1;
-	bkgCnt.colorMode = 1;
-	bkgCnt.characterBaseBlock = 0;
-	bkgCnt.screenBaseBlock = 8;
-	loadBackground(BKG0, &bkgCnt);
-
-	// for sprite layer
-	bkgCnt.priority = 0;
-	bkgCnt.screenBaseBlock = 9;
-	loadBackground(BKG1, &bkgCnt);
-
-	loadColorPalette(COLOR_PALETTE);
-	for(int i=0; i < ( sizeof(TILE_MAP) / sizeof(Tile) ); i++) {
-		setTileData(BKG0, i, TILE_MAP[i]);
-	}
-
-	for (Key i = KEY_RIGHT; i <= KEY_DOWN; i++) {
-		setKeyHandler(i, handleDPADEvents);
-	}
-	setKeyHandler(KEY_A, handleKeyA);
-	setKeyHandler(KEY_B, handleKeyB);
-	setKeyHandler(KEY_START, handleKeyStart);
-
 	initializeGame();
+	while(true) {
+		Background bkgCnt;
+		// for background layer
+		bkgCnt.priority = 1;
+		bkgCnt.colorMode = 1;
+		bkgCnt.characterBaseBlock = 0;
+		bkgCnt.screenBaseBlock = 8;
+		loadBackground(BKG0, &bkgCnt);
 
+		// for sprite layer
+		bkgCnt.priority = 0;
+		bkgCnt.screenBaseBlock = 9;
+		loadBackground(BKG1, &bkgCnt);
 
-	drawScreen();
-	setScreenEntry(BKG0, PrevCursorPosition, 2);
-	while (true) {
-		processKeys();
-		validateCursor();
-		if(PrevCursorPosition.x != CurrCursorPosition.x || PrevCursorPosition.y != CurrCursorPosition.y) {
-			setScreenEntry(BKG0, PrevCursorPosition, getScreenEntry(BKG0, PrevCursorPosition) - 1);
-			setScreenEntry(BKG0, CurrCursorPosition, getScreenEntry(BKG0, CurrCursorPosition) + 1);
-			PrevCursorPosition = CurrCursorPosition;
+		loadColorPalette(COLOR_PALETTE);
+		for(int i=0; i < ( sizeof(TILE_MAP) / sizeof(Tile) ); i++) {
+			setTileData(BKG0, i, TILE_MAP[i]);
 		}
 
-		if (IsScreenDirty) {
-			drawScreen();
-			IsScreenDirty = false;
+		for (Key i = KEY_RIGHT; i <= KEY_DOWN; i++) {
+			setKeyHandler(i, handleDPADEvents);
+		}
+		setKeyHandler(KEY_A, handleKeyA);
+		setKeyHandler(KEY_B, handleKeyB);
+		setKeyHandler(KEY_START, handleKeyStart);
+
+
+		drawScreen();
+		setScreenEntry(BKG0, PrevCursorPosition, 2);
+		while (getGameState() == GAME_RUNNING) {
+			processKeys();
+			validateCursor();
+			if(PrevCursorPosition.x != CurrCursorPosition.x || PrevCursorPosition.y != CurrCursorPosition.y) {
+				setScreenEntry(BKG0, PrevCursorPosition, getScreenEntry(BKG0, PrevCursorPosition) - 1);
+				setScreenEntry(BKG0, CurrCursorPosition, getScreenEntry(BKG0, CurrCursorPosition) + 1);
+				PrevCursorPosition = CurrCursorPosition;
+			}
+
+			if (IsScreenDirty) {
+				drawScreen();
+				IsScreenDirty = false;
+			}
+
+			rand();
+			sleep(7);
 		}
 
-		rand();
-		sleep(7);
+		for(Key k = KEY_A; k <= MAX_KEY; k++) {
+			setKeyHandler(k, handleAllKeys);
+		}
+
+		loadBackground(BKG1, NULL); // Unload front background
+
+		while(getGameState() == GAME_OVER) {
+			processKeys();
+
+			rand();
+			sleep(7);
+		}
+
+		for(Key k = KEY_A; k <= MAX_KEY; k++) {
+			setKeyHandler(k, NULL);
+		}
 	}
 }
 
@@ -134,7 +154,7 @@ void handleKeyB(KeyEvent event) {
 
 	if(SelectedEntity) {
 		SelectedEntity = NULL;
-		IsScreenDirty = true;
+		IsScreenDirty = getGameState() == GAME_RUNNING;
 	}
 }
 
@@ -148,6 +168,14 @@ void handleKeyStart(KeyEvent event) {
 		SelectedEntity = NULL;
 	}
 	IsScreenDirty = true;
+}
+
+void handleAllKeys(KeyEvent event) {
+	if(event.state != KEY_STATE_PRESS) {
+		return;
+	}
+
+	initializeGame();
 }
 
 void validateCursor() {
