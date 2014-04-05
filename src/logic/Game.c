@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include "logic/Game.h"
 #include "logic/EntityPool.h"
+#include "logic/Random.h"
 
 Entity grid[GRID_WIDTH][GRID_HEIGHT];
 unsigned int calculateNumMoves(Position, Position, ActionPoint);
@@ -77,7 +78,7 @@ void endTurn(){
 
 }
 void moveZombie(Entity z){
-	int r = rand()*4>>15;
+	int r = getRandomNum()*4>>15;
 	Position p = z->position;
 	if(r == 0){
 		p.x--;
@@ -91,6 +92,19 @@ void moveZombie(Entity z){
 	else{
 		p.y--;
 	}
+
+	if(p.x < 0){
+		p.x = 0;
+	}
+	else if(p.x > GRID_WIDTH){
+		p.x = GRID_WIDTH;
+	}
+	if(p.y < 0){
+		p.y = 0;
+	}
+	else if(p.y > GRID_HEIGHT){
+		p.y = GRID_HEIGHT;
+	}
 	move(z,p);
 }
 bool shoot(Entity shooter, Position shotAt){
@@ -98,7 +112,7 @@ bool shoot(Entity shooter, Position shotAt){
 		if(shooter->remainingPoints > 0){
 
 			//if the random number is greater than the number of moves, the shot hits
-			if(rand()*50>>15 > calculateNumMoves(shooter->position, shotAt, 50)){
+			if(getRandomNum()*50>>15 > calculateNumMoves(shooter->position, shotAt, 50)){
 				//hit
 				Entity e = grid[shotAt.x][shotAt.y];
 				grid[shotAt.x][shotAt.y] = NULL;
@@ -121,7 +135,7 @@ bool shoot(Entity shooter, Position shotAt){
 	}
 }
 bool addNewZombie(){
-	Position p = { rand()*30>>15, rand()*20>>15 };
+	Position p = { getRandomNum()*30>>15, getRandomNum()*20>>15 };
 
 	if(getEntityAt(p) == NULL){
 		grid[p.x][p.y] = createZombie(p);
