@@ -2,6 +2,7 @@
 
 #include "logic/Game.h"
 #include "graphics/ColorPalette.h"
+#include "graphics/Background.h"
 
 #define TRUE  1
 #define FALSE 0
@@ -35,19 +36,6 @@ typedef struct {
 	char L      : 1;
 } KEY_MAP __attribute__((packed));
 
-typedef union {
-	struct {
-		char PR    : 2;
-		char CBB   : 2;
-		char       : 2;
-		char MOS   : 1;
-		char CM    : 1;
-		char SBB   : 5;
-		char WR    : 1;
-		char SZ    : 2;
-	} REGISTER_BITS __attribute__((packed));
-	unsigned short REGISTER_VAL;
-} BKG_CNT;
 
 KEY_MAP KEYS;
 
@@ -68,32 +56,29 @@ void clearScreen() {
 		}
 	}
 }
-#define RGB16(r, g, b) ( ( r ) + ( ( g ) << 5 ) + ( ( b ) << 10 ) )
-int main() {
-	//int x, y, prevX, prevY;
-	REG_DISPCNT = MODE_0 | BG0_ENABLE | BG1_ENABLE;
 
-	BKG_CNT bkgCnt;
+int main() {
+	Background bkgCnt;
 	// for background layer
-	bkgCnt.REGISTER_VAL = 0;
-	bkgCnt.REGISTER_BITS.CM = 1;
-	bkgCnt.REGISTER_BITS.SBB = 8;
-	REG_BG0CNT = bkgCnt.REGISTER_VAL;
+	bkgCnt.priority = 0;
+	bkgCnt.colorMode = 1;
+	bkgCnt.characterBaseBlock = 0;
+	bkgCnt.screenBaseBlock = 8;
+	loadBackground(BKG0, &bkgCnt);
 
 	// for sprite layer
-	bkgCnt.REGISTER_VAL = 0;
-	bkgCnt.REGISTER_BITS.PR = 1;
-	bkgCnt.REGISTER_BITS.CM = 1;
-	bkgCnt.REGISTER_BITS.SBB = 9;
-	REG_BG1CNT = bkgCnt.REGISTER_VAL;
+	bkgCnt.priority = 1;
+	bkgCnt.screenBaseBlock = 9;
+	loadBackground(BKG1, &bkgCnt);
 
-	memcpy(COLOR_PALETTE_ADDR, COLOR_PALETTE, sizeof(COLOR_PALETTE));
-	for(int i=0; i<16 * 1024 / 2; i++) {
-		((volatile unsigned short *) 0x06000000)[i] = ((unsigned short *) CHARACTER_BASE_BLOCK)[i];
-	}
-	for(int i=0; i<1024; i++) { // SBB
-		((volatile unsigned short *) 0x06004000)[i] = 0x000;
-	}
+	loadColorPalette(COLOR_PALETTE);
+	loadTileMap(BKG0, CHARACTER_BASE_BLOCK);
+
+	Position p = { 0, 1 };
+	setScreenEntry(BKG0, p, 1);
+	p = (Position) { 1, 0 };
+	setScreenEntry(BKG0, p, 2);
+
 	while(true) {};
 }
 
