@@ -12,6 +12,7 @@ void moveZombie(Entity);
 Entity createZombie(Position p);
 Entity createSurvivor(Position p);
 bool addNewZombie();
+bool addNewSurvivor();
 
 GameState getGameState() {
 	return CurState;
@@ -34,7 +35,7 @@ void initializeGame(){
 	}
 
 
-	grid[0][0] = createSurvivor((Position) { 0 ,0 });
+	grid[15][10] = createSurvivor((Position) { 15 ,10 });
 	CurState = GAME_RUNNING;
 
 }
@@ -78,7 +79,10 @@ void endTurn(){
 			}
 		}
 	}
-
+	addNewZombie();
+	if(rand()%100 > 95){
+		addNewSurvivor();
+	}
 	if(NumSurvivors == 0) {
 		CurState = GAME_OVER;
 	}
@@ -193,7 +197,24 @@ bool shoot(Entity shooter, Position shotAt){
 	}
 }
 bool addNewZombie(){
-	Position p = { rand()%30, rand()%20 };
+	unsigned int wall = rand()%4;
+	Position p;
+
+	if(wall == 0){
+		p = (Position){ GRID_WIDTH-1, rand()%20 };
+	}
+
+	else if(wall== 1){
+		p = (Position){ rand()%30, 0 };
+	}
+	else if(wall == 2){
+		p = (Position){ rand()%30, GRID_HEIGHT-1};
+	}
+	else{
+		p = (Position){ 0, rand()%20 };
+	}
+
+
 
 	if(getEntityAt(p) == NULL){
 		grid[p.x][p.y] = createZombie(p);
@@ -203,6 +224,35 @@ bool addNewZombie(){
 		return false;
 	}
 }
+bool addNewSurvivor(){
+	unsigned int wall = rand()%4;
+	Position p;
+
+	if(wall == 0){
+		p = (Position){ GRID_WIDTH-1, rand()%20 };
+	}
+
+	else if(wall== 1){
+		p = (Position){ rand()%30, 0 };
+	}
+	else if(wall == 2){
+		p = (Position){ rand()%30, GRID_HEIGHT-1};
+	}
+	else{
+		p = (Position){ 0, rand()%20 };
+	}
+
+
+
+	if(getEntityAt(p) == NULL){
+		grid[p.x][p.y] = createSurvivor(p);
+		return true;
+	}
+	else{
+		return false;
+	}
+}
+
 Entity createZombie(Position p){
 	Entity zombie = allocEntity();
 	zombie->remainingHealth = 1;
