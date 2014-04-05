@@ -31,3 +31,4 @@ bool move(Entity c, Position p){
 void endTurn(){
 
 }
+//
