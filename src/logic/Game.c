@@ -3,6 +3,8 @@
 #include "logic/EntityPool.h"
 
 Entity grid[GRID_WIDTH][GRID_HEIGHT];
+unsigned int calculateNumMoves(Position, Position, ActionPoint);
+void moveZombie(Entity);
 
 void initializeGame(){
 	initializePool();
@@ -69,7 +71,7 @@ void endTurn(){
 		for(j=0; j<GRID_HEIGHT;j++){
 			if(grid[i][j] != NULL){
 				if(grid[i][j]->type == ET_ZOMBIE){
-					move(grid[i][j]);
+					moveZombie(grid[i][j]);
 
 				}
 				grid[i][j]->remainingPoints = MAX_ACTION_POINTS[grid[i][j]->type];
@@ -79,7 +81,7 @@ void endTurn(){
 	}
 
 }///
-void moveZomibe(Entity z){
+void moveZombie(Entity z){
 	int r = rand()*4>>15;
 	Position p = z->position;
 	if(r == 0){
