@@ -1,5 +1,6 @@
 #include <stdbool.h>
 #include <stddef.h>
+#include <math.h>
 
 #include "logic/Game.h"
 

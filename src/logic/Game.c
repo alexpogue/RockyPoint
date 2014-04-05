@@ -9,6 +9,7 @@ void moveZombie(Entity);
 Entity createZombie(Position p);
 Entity createSurvivor(Position p);
 Position createPosition(unsigned int x,unsigned int y);
+bool addNewZombie();
 
 
 void initializeGame(){
