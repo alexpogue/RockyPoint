@@ -109,11 +109,14 @@ void handleKeyA(KeyEvent event) {
 	}
 	Entity e = getEntityAt(PrevCursorPosition);
 	if (e != NULL) {
-		if (getType(e) == ET_SURVIVOR) {
+		EntityType type = getType(e);
+		if (type == ET_SURVIVOR) {
 			SelectedEntity = e;
 			IsScreenDirty = true;
-		} else {
-
+		} else if(type == ET_ZOMBIE){
+			if(SelectedEntity) {
+				IsScreenDirty = shoot(SelectedEntity, PrevCursorPosition);
+			}
 		}
 	}
 	else if (SelectedEntity) {
