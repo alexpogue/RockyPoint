@@ -24,7 +24,7 @@ void initializeGame(){
 
 	//put some zombies in
 	for(i=0; i < 15; i++){
-		addZombie();
+		addNewZombie();
 	}
 
 
@@ -148,7 +148,7 @@ bool addNewZombie(){
 		return false;
 	}
 }
-Entity createZomibe(Position p){
+Entity createZombie(Position p){
 	Entity zombie;
 	zombie->remainingHealth = 1;
 	zombie->type = ET_ZOMBIE;
