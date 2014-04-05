@@ -27,8 +27,6 @@ void initializeGame(){
 		addNewZombie();
 	}
 
-	grid[15][15] = createZombie((Position) { 15, 15 });
-
 
 	grid[0][0] = createSurvivor((Position) { 0 ,0 });
 
@@ -92,19 +90,18 @@ void moveZombie(Entity z){
 		p.y--;
 	}
 
-	if(p.x < 0){
-		p.x = 0;
+
+	if(p.x >= GRID_WIDTH){
+		p.x = z->position.x;;
 	}
-	else if(p.x > GRID_WIDTH){
-		p.x = GRID_WIDTH;
+
+	if(p.y >= GRID_HEIGHT){
+		p.y = z->position.y;
 	}
-	if(p.y < 0){
-		p.y = 0;
+
+	if(z->position.x != p.x || z->position.y != p.y) {
+		move(z,p);
 	}
-	else if(p.y > GRID_HEIGHT){
-		p.y = GRID_HEIGHT;
-	}
-	move(z,p);
 }
 bool shoot(Entity shooter, Position shotAt){
 	if(getEntityAt(shotAt)->type == ET_ZOMBIE){
