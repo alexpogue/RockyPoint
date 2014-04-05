@@ -37,7 +37,7 @@ env:
 $(BUILDDIR)/%.o : $(SRCDIR)/%.c
 	$(CC) $(CFLAGS) $(HEADERS) -o $@ $^
 	
-$(OUTELF):
+$(OUTELF): $(CSRCS)
 	$(CC) $(CFLAGS) $(HEADERS) -o $(OUTELF) $(CSRCS)
 
 $(OUTROM) : $(OUTELF)

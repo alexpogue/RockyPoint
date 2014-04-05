@@ -9,9 +9,17 @@
 #include "logic/EntityPool.h"
 
 Position getPosition(Entity e) {
-	return e->p;
+	return e->position;
 }
 
 EntityType getType(Entity e) {
 	return e->type;
+}
+
+ActionPoint getRemainingActionPoints(Entity e) {
+	return e->remainingPoints;
+}
+
+EntityHealth getRemainingHealth(Entity e) {
+	return e->remainingHealth;
 }

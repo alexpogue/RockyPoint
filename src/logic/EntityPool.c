@@ -10,6 +10,7 @@
 #include "logic/EntityPool.h"
 #include "logic/Game.h"
 
+ActionPoint MAX_ACTION_POINT[MAX_ENTITY_TYPE + 1];
 
 union Node_t {
 	struct Entity_t USED;
@@ -28,6 +29,12 @@ void initializePool() {
 	for(int i=0; i<MAX_ENTITIES; i++) {
 		freeEntity(&pool[i].USED);
 	}
+
+	for(int i=0; i<MAX_ENTITY_TYPE; i++) {
+		MAX_ACTION_POINT[i] = 0;
+	}
+	MAX_ACTION_POINT[ET_SURVIVOR] = 2;
+	MAX_ACTION_POINT[ET_ZOMBIE]   = 1;
 }
 
 void freeEntity(Entity entity) {

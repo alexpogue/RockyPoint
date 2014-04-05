@@ -10,10 +10,12 @@
 
 #include "logic/Entity.h"
 
+
 struct Entity_t {
 	EntityType type;
-	Position p;
-	int health;
+	ActionPoint remainingPoints;
+	Position position;
+	EntityHealth remainingHealth;
 };
 
 Entity allocEntity();
@@ -21,5 +23,7 @@ Entity allocEntity();
 void freeEntity(Entity);
 
 void initializePool();
+
+extern const ActionPoint MAX_ACTION_POINTS[MAX_ENTITY_TYPE + 1];
 
 #endif /* ENTITYPOOL_H_ */
