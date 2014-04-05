@@ -78,7 +78,7 @@ void endTurn(){
 		}
 	}
 
-}
+}//
 void moveZomibe(Entity z){
 	int r = rand()*4>>15;
 	Position p = z->position;
