@@ -78,7 +78,7 @@ void endTurn(){
 
 }
 void moveZombie(Entity z){
-	int r = getRandomNum()*4>>15;
+	int r = rand()%4;
 	Position p = z->position;
 	if(r == 0){
 		p.x--;
@@ -112,7 +112,7 @@ bool shoot(Entity shooter, Position shotAt){
 		if(shooter->remainingPoints > 0){
 
 			//if the random number is greater than the number of moves, the shot hits
-			if(getRandomNum()*50>>15 > calculateNumMoves(shooter->position, shotAt, 50)){
+			if(rand()%50 > calculateNumMoves(shooter->position, shotAt, 50)){
 				//hit
 				Entity e = grid[shotAt.x][shotAt.y];
 				grid[shotAt.x][shotAt.y] = NULL;
@@ -135,7 +135,7 @@ bool shoot(Entity shooter, Position shotAt){
 	}
 }
 bool addNewZombie(){
-	Position p = { getRandomNum()*30>>15, getRandomNum()*20>>15 };
+	Position p = { rand()%30, rand()%20 };
 
 	if(getEntityAt(p) == NULL){
 		grid[p.x][p.y] = createZombie(p);
