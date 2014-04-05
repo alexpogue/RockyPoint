@@ -1,72 +1,28 @@
-#include <string.h>
+#include <stdbool.h>
 
 #include "logic/Game.h"
+
 #include "graphics/ColorPalette.h"
 #include "graphics/Background.h"
 #include "graphics/KeyManager.h"
 
-#define TRUE  1
-#define FALSE 0
+bool IsScreenDirty = true;
 
-#define NUM_ROWS 160
-#define NUM_COLS 240
+Position PrevCursorPosition = { 0, 0 };
+Position CurrCursorPosition = { 0, 0 };
 
-#define VIDMEM_OFF(x, y) ( ( x ) + ( ( y ) * NUM_COLS ) )
-#define RGB16(r, g, b) ( ( r ) + ( ( g ) << 5 ) + ( ( b ) << 10 ) )
-#define REG_DISPCNT *(unsigned int*)0x4000000
-#define REG_BG0CNT *(unsigned short*)0x04000008
-#define REG_BG1CNT *(unsigned short*)0x0400000A
-#define MODE_0 0x0
-#define BG0_ENABLE ( 1 << 8 )
-#define BG1_ENABLE ( 1 << 9 )
-#define BG2_ENABLE 0x400
-#define SPRITES_ENABLE 0x1000
-
-#define COLOR_PALETTE_ADDR ((volatile unsigned short *) 0x5000000 )
-
-typedef struct {
-	char A      : 1;
-	char B      : 1;
-	char SELECT : 1;
-	char START  : 1;
-	char RIGHT  : 1;
-	char LEFT   : 1;
-	char UP     : 1;
-	char DOWN   : 1;
-	char R      : 1;
-	char L      : 1;
-} KEY_MAP __attribute__((packed));
-
-
-KEY_MAP KEYS;
-
-unsigned short *KEY_REG = ( unsigned short * ) 0x04000130;
-
-void clearScreen();
-
-void pollKeys();
 void sleep(int);
 
 int main();
 
-void onKeyPress(KEY k) {
-	Position p = { k, 0 };
-	setScreenEntry(BKG0, p, 2);
-}
+void handleDPADEvents(KeyEvent);
 
-void onKeyRelease(KEY k) {
-	Position p = { k, 0 };
-	setScreenEntry(BKG0, p, 1);
-}
 
-void clearScreen() {
-	int x, y;
-	for(x = 0; x < NUM_COLS; x++) {
-		for(y = 0; y < NUM_ROWS; y++) {
-			//setPixel(x, y, 0, 0, 0);
-		}
-	}
-}
+void validateCursor();
+
+void drawScreen();
+
+
 
 int main() {
 	Background bkgCnt;
@@ -85,28 +41,23 @@ int main() {
 	loadColorPalette(COLOR_PALETTE);
 	loadTileMap(BKG0, CHARACTER_BASE_BLOCK);
 
-	KeyHandler handler;
-	handler.onKeyPressed = onKeyPress;
-	handler.onKeyReleased = onKeyRelease;
-	handler.onKeyRepeat = 0;
-	for(KEY i = 0; i <= MAX_KEY; i++) {
-		setKeyHandler(i, &handler);
+	for(Key i = KEY_RIGHT; i <= KEY_DOWN; i++) {
+		setKeyHandler(i, handleDPADEvents);
 	}
 
+	setScreenEntry(BKG0, PrevCursorPosition, 2);
 	while(true) {
 		processKeys();
+
+		if(IsScreenDirty) {
+			drawScreen();
+			IsScreenDirty = false;
+		}
+
+		sleep(10);
 	}
 }
 
-void pollKeys() {
-	union {
-		KEY_MAP bitmap_t;
-		unsigned short bitmap_p;
-	} con;
-
-	con.bitmap_p = ~(*KEY_REG);
-	KEYS = con.bitmap_t;
-}
 
 void sleep(int i)
 {
@@ -117,4 +68,42 @@ void sleep(int i)
 		for (x = 0; x < 3750; x++)
 			c = c + 2; // do something to slow things down
 	}
+}
+
+void handleDPADEvents(KeyEvent event) {
+	if(event.state == KEY_STATE_PRESS || event.state == KEY_STATE_REPEAT) {
+		switch(event.key) {
+		case KEY_UP:
+			CurrCursorPosition.y--;
+			break;
+		case KEY_DOWN:
+			CurrCursorPosition.y++;
+			break;
+		case KEY_LEFT:
+			CurrCursorPosition.x--;
+			break;
+		case KEY_RIGHT:
+			CurrCursorPosition.x++;
+			break;
+		}
+		IsScreenDirty = true;
+	}
+}
+
+void validateCursor() {
+	if(CurrCursorPosition.x >= GRID_WIDTH) {
+		CurrCursorPosition.x = PrevCursorPosition.x;
+	}
+
+	if(CurrCursorPosition.y >= GRID_HEIGHT) {
+		CurrCursorPosition.y = PrevCursorPosition.y;
+	}
+}
+
+void drawScreen() {
+	validateCursor();
+
+	setScreenEntry(BKG0, PrevCursorPosition, getScreenEntry(BKG0, PrevCursorPosition) - 1);
+	setScreenEntry(BKG0, CurrCursorPosition, getScreenEntry(BKG0, CurrCursorPosition) + 1);
+	PrevCursorPosition = CurrCursorPosition;
 }

@@ -8,7 +8,7 @@
 #ifndef KEYMANAGER_H_
 #define KEYMANAGER_H_
 
-typedef unsigned char KEY;
+typedef unsigned char Key;
 
 #define KEY_A      0
 #define KEY_B      1
@@ -23,18 +23,23 @@ typedef unsigned char KEY;
 
 #define MAX_KEY    KEY_L
 
-typedef void (* KeyPressedFunc)(KEY key);
-typedef void (* KeyReleasedFunc)(KEY key);
-typedef void (* KeyRepeatFunc)(KEY key);
+
+typedef unsigned char KeyState;
+
+#define KEY_STATE_PRESS   0
+#define KEY_STATE_RELEASE 1
+#define KEY_STATE_REPEAT  2
 
 typedef struct {
-	KeyPressedFunc onKeyPressed;
-	KeyReleasedFunc onKeyReleased;
-	KeyRepeatFunc onKeyRepeat;
-} KeyHandler;
+	Key key;
+	KeyState state;
+} KeyEvent;
+
+typedef void (* KeyHandler)(KeyEvent state);
+
 
 void processKeys();
 
-void setKeyHandler(KEY key, KeyHandler *handler);
+void setKeyHandler(Key key, KeyHandler handler);
 
 #endif /* KEYMANAGER_H_ */

@@ -13,12 +13,12 @@
 KeyHandler handlers[MAX_KEY + 1];
 unsigned short prevKeyState = 0;
 
-void setKeyHandler(KEY key, KeyHandler *handler) {
+void setKeyHandler(Key key, KeyHandler handler) {
 	if(key > MAX_KEY) {
 		return;
 	}
 
-	handlers[key] = *handler;
+	handlers[key] = handler;
 }
 
 void processKeys() {
@@ -27,25 +27,31 @@ void processKeys() {
 	unsigned short cur = curKeyState;
 	unsigned short prev = prevKeyState;
 
-	for(KEY i=0; i<=MAX_KEY; i++, cur >>= 1, prev >>= 1) {
-		KeyHandler *handler = &handlers[i];
+	for(Key i=0; i<=MAX_KEY; i++, cur >>= 1, prev >>= 1) {
+		KeyHandler handler = handlers[i];
+		if(!handler) {
+			continue;
+		}
+
+		KeyEvent event;
+		event.key = i;
+
 		if(cur & 1) {
 			if(prev & 1) {
-				if(handler->onKeyRepeat) {
-					handler->onKeyRepeat(i);
-				}
+				event.state = KEY_STATE_REPEAT;
 			}
 			else {
-				if(handler->onKeyPressed) {
-					handler->onKeyPressed(i);
-				}
+				event.state = KEY_STATE_PRESS;
 			}
 		}
 		else if(prev & 1) {
-			if(handler->onKeyReleased) {
-				handler->onKeyReleased(i);
-			}
+			event.state = KEY_STATE_RELEASE;
 		}
+		else {
+			continue;
+		}
+
+		handler(event);
 	}
 
 	prevKeyState = curKeyState;
