@@ -20,7 +20,8 @@ typedef unsigned short SBB[2 * 1024 / sizeof(unsigned short)];
 #define BKG_CNT_REG ( (volatile unsigned short *) 0x04000008)
 #define BKG_BIT(b)  ( 1 << ( 8 + ( b ) ) )
 
-#define REG_DISPCNT *(unsigned int*)0x4000000
+#define REG_DISPCNT (*(volatile unsigned short *) 0x04000000)
+#define REG_VCOUNT  (*(volatile unsigned short *) 0x04000006)
 
 CBB *CharacterBaseBlocks = (CBB *) 0x06000000;
 SBB *ScreenBaseBlocks    = (SBB *) 0x06000000;
@@ -105,4 +106,9 @@ TileId getScreenEntry(BkgId bkgId, Position pos) {
 
 	Background *bkg = &Backgrounds[bkgId];
 	return ScreenBaseBlocks[bkg->screenBaseBlock][SBB_OFFSET(pos)];
+}
+
+void vsync() {
+	while(REG_VCOUNT >= 160) {}
+	while(REG_VCOUNT < 160) {}
 }

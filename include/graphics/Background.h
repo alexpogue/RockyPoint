@@ -52,4 +52,6 @@ void setScreenEntry(BkgId bkg, Position pos, TileId tile);
 
 TileId getScreenEntry(BkgId bkg, Position pos);
 
+void vsync();
+
 #endif /* BACKGROUND_H_ */
