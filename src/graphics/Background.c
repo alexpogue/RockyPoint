@@ -97,3 +97,12 @@ void setScreenEntry(BkgId bkgId, Position pos, TileId tileId) {
 	Background *bkg = &Backgrounds[bkgId];
 	ScreenBaseBlocks[bkg->screenBaseBlock][SBB_OFFSET(pos)] = tileId;
 }
+
+TileId getScreenEntry(BkgId bkgId, Position pos) {
+	if(bkgId >= 4) {
+		return 0;
+	}
+
+	Background *bkg = &Backgrounds[bkgId];
+	return ScreenBaseBlocks[bkg->screenBaseBlock][SBB_OFFSET(pos)];
+}

@@ -50,4 +50,6 @@ void setTileData(BkgId bkg, TileId id, Tile tile);
 
 void setScreenEntry(BkgId bkg, Position pos, TileId tile);
 
+TileId getScreenEntry(BkgId bkg, Position pos);
+
 #endif /* BACKGROUND_H_ */
