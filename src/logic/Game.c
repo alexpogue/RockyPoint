@@ -110,7 +110,7 @@ bool shoot(Entity shooter, Position shotAt){
 		if(shooter->remainingPoints > 0){
 
 			//if the random number is greater than the number of moves, the shot hits
-			if(rand()*50>>15 > calculaterNumMoves(shooter->position, shotAt, 50)){
+			if(rand()*50>>15 > calculateNumMoves(shooter->position, shotAt, 50)){
 				//hit
 				grid[shotAt.x][shotAt.y] = NULL;
 			}
