@@ -3,6 +3,9 @@
 #include "logic/Game.h"
 #include "logic/EntityPool.h"
 
+unsigned int NumSurvivors = 0;
+GameState CurState = GAME_OVER;
+
 Entity grid[GRID_WIDTH][GRID_HEIGHT];
 unsigned int calculateDistance(Position, Position);
 void moveZombie(Entity);
@@ -10,6 +13,9 @@ Entity createZombie(Position p);
 Entity createSurvivor(Position p);
 bool addNewZombie();
 
+GameState getGameState() {
+	return CurState;
+}
 
 void initializeGame(){
 	initializePool();
@@ -29,6 +35,7 @@ void initializeGame(){
 
 
 	grid[0][0] = createSurvivor((Position) { 0 ,0 });
+	CurState = GAME_RUNNING;
 
 }
 Entity getEntityAt(Position p){
@@ -68,11 +75,13 @@ void endTurn(){
 
 				}
 				grid[i][j]->remainingPoints = MAX_ACTION_POINTS[grid[i][j]->type];
-
 			}
 		}
 	}
 
+	if(NumSurvivors == 0) {
+		CurState = GAME_OVER;
+	}
 }
 void moveZombie(Entity z){
 	int r = rand()%4;
@@ -111,6 +120,7 @@ void moveZombie(Entity z){
 			target->remainingHealth--;
 			if(target->remainingHealth == 0) {
 				// Convert the heretics
+				NumSurvivors--;
 				target->type = ET_ZOMBIE;
 			}
 		}
@@ -207,5 +217,8 @@ Entity createSurvivor(Position p){
 		survivor->type = ET_SURVIVOR;
 		survivor->remainingPoints = MAX_ACTION_POINTS[survivor->type];
 		survivor->position = p;
+
+		NumSurvivors++;
+
 		return survivor;
 }
