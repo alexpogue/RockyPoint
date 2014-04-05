@@ -210,14 +210,14 @@ void drawScreen() {
 		Position p;
 		for (signed int y = -remPoints; y <= remPoints; y++) {
 			p.y = ePosition.y + y;
-			if(p.y >= ( GRID_HEIGHT - 1 )) {
+			if(p.y >= GRID_HEIGHT) {
 				continue;
 			}
 
 			signed int width = remPoints - abs(y);
 			for (signed int x = -width; x <= width; x++) {
 				p.x = ePosition.x + x;
-				if(p.x >= ( GRID_WIDTH - 1 )) {
+				if(p.x >= GRID_WIDTH) {
 					continue;
 				}
 
