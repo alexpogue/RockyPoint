@@ -73,7 +73,7 @@ unsigned int calculateNumMoves(Position c, Position p, ActionPoint a){
 			i++;
 		}
 		else{
-			//Not supposed to happen ;)
+			//Not supposed to happen
 		}
 	}
 	return i;
