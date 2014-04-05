@@ -6,7 +6,7 @@
 Entity grid[GRID_WIDTH][GRID_HEIGHT];
 unsigned int calculateNumMoves(Position, Position, ActionPoint);
 void moveZombie(Entity);
-Entity createZomibe(Position p);
+Entity createZombie(Position p);
 Entity createSurvivor(Position p);
 Position createPosition(unsigned int x,unsigned int y);
 
@@ -149,7 +149,7 @@ bool addNewZombie(){
 	}
 }
 Entity createZombie(Position p){
-	Entity zombie;
+	Entity zombie = allocEntity();
 	zombie->remainingHealth = 1;
 	zombie->type = ET_ZOMBIE;
 	zombie->remainingPoints = MAX_ACTION_POINTS[zombie->type];
@@ -157,7 +157,7 @@ Entity createZombie(Position p){
 	return zombie;
 }
 Entity createSurvivor(Position p){
-		Entity survivor;
+		Entity survivor = allocEntity();
 		survivor->remainingHealth = 1;
 		survivor->type = ET_SURVIVOR;
 		survivor->remainingPoints = MAX_ACTION_POINTS[survivor->type];
