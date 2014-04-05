@@ -89,7 +89,7 @@ void moveZombie(Entity z){
 			}
 
 			Entity e = getEntityAt((Position) { (unsigned int) x, (unsigned int) y });
-			if(e && getType(e) == ET_SURVIVOR) {
+			if(e && e->type == ET_SURVIVOR) {
 				if(target) {
 					Position o = getPosition(target);
 					Position u = getPosition(e);
@@ -110,10 +110,8 @@ void moveZombie(Entity z){
 			// Attack
 			target->remainingHealth--;
 			if(target->remainingHealth == 0) {
-				// Kill
-				grid[o.x][o.y] = NULL;
-				freeEntity(target);
-				p = o;
+				// Convert the heretics
+				target->type = ET_ZOMBIE;
 			}
 		}
 		else if(o.y < p.y) {
