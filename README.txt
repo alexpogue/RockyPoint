@@ -12,7 +12,6 @@ Able to be loaded on any GBA Emulator!
 Recommened GBA.js: http://jpfau.github.io/gbajs/
 
 Controls:
-
 A - Select/Move/Shoot
 B - Deselect
 Start - End turn
