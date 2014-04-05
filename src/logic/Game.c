@@ -1,5 +1,6 @@
 #include <stddef.h>
 #include <stdlib.h>
+#include <math.h>
 #include "logic/Game.h"
 #include "logic/EntityPool.h"
 
@@ -80,7 +81,10 @@ void endTurn(){
 			}
 		}
 	}
-	addNewZombie();
+	unsigned int spawns = (score * .5);
+	for(i = 0; i < 1+spawns ; i++){
+		addNewZombie();
+	}
 	if(rand()%100 > 95){
 		addNewSurvivor();
 	}
@@ -177,7 +181,7 @@ bool shoot(Entity shooter, Position shotAt){
 
 			//if the random number is greater than the number of moves, the shot hits
 			unsigned int distance = calculateDistance(shooter->position, shotAt);
-			if(rand()%50 > distance){
+			if((rand()%50) > distance + score*.2){
 				//hit
 				Entity e = grid[shotAt.x][shotAt.y];
 				grid[shotAt.x][shotAt.y] = NULL;
