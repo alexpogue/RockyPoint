@@ -5,15 +5,15 @@
  *      Author: Jacob61
  */
 
-#ifndef ENTITYINTERNAL_H_
-#define ENTITYINTERNAL_H_
+#ifndef ENTITYPOOL_H_
+#define ENTITYPOOL_H_
 
 #include "logic/Entity.h"
 
 struct Entity_t {
 	EntityType type;
 	Position p;
-	int health
+	int health;
 };
 
 Entity allocEntity();
@@ -22,4 +22,4 @@ void freeEntity(Entity);
 
 void initializePool();
 
-#endif /* ENTITYINTERNAL_H_ */
+#endif /* ENTITYPOOL_H_ */
