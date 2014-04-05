@@ -18,11 +18,18 @@ Entity getEntityAt(Position p){
 	return grid[p.x][p.y];
 }
 bool move(Entity c, Position p){
-	if(NULL == grid[p.x][p.y]){
-		grid[p.x][p.y] = c;
-		grid[c->p.x][c->p.y] = NULL;
-		c->p = p;
-		return true;
+	unsigned int numMoves = calculateNumMoves(c->position,p, c->remainingPoints);
+	if(c->remainingPoints >= numMoves){
+		if(NULL == grid[p.x][p.y]){
+			grid[p.x][p.y] = c;
+			grid[c->position.x][c->position.y] = NULL;
+			c->position = p;
+			c->remainingPoints-=numMoves;
+			return true;
+		}
+		else{
+			return false;
+		}
 	}
 	else{
 		return false;
@@ -31,4 +38,30 @@ bool move(Entity c, Position p){
 void endTurn(){
 
 }
+unsigned int calculateNumMoves(Position c, Position p, ActionPoint a){
+	unsigned int i = 0;
+	while((c.x != p.x && c.y != p.y)|| i > a){
+		if(c.x < p.x){
+			c.x++;
+			i++;
+		}
+		else if(c.x > p.x){
+			c.x--;
+			i++;
+		}
+		else if(c.y < p.y){
+			c.y++;
+			i++;
+		}
+		else if(c.y > p.y){
+			c.y--;
+			i++;
+		}
+		else{
+			//Not supposed to happen
+		}
+	}
+	return i;
+}
+
 //;)
