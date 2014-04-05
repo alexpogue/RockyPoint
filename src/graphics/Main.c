@@ -43,7 +43,9 @@ int main() {
 	loadBackground(BKG1, &bkgCnt);
 
 	loadColorPalette(COLOR_PALETTE);
-	loadTileMap(BKG0, CHARACTER_BASE_BLOCK);
+	for(int i=0; i < ( sizeof(TILE_MAP) / sizeof(Tile) ); i++) {
+		setTileData(BKG0, i, TILE_MAP[i]);
+	}
 
 	for (Key i = KEY_RIGHT; i <= KEY_DOWN; i++) {
 		setKeyHandler(i, handleDPADEvents);

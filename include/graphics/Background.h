@@ -12,7 +12,7 @@
 
 typedef const unsigned short ColorPalette[256];
 
-typedef unsigned short Tile[32];
+typedef unsigned char Tile[64];
 typedef Tile TileMap[256];
 
 typedef unsigned char BkgId;
@@ -40,13 +40,13 @@ typedef struct {
 } __attribute__((packed)) Background;
 
 
-void loadColorPalette(ColorPalette palette);
+void loadColorPalette(const ColorPalette palette);
 
-void loadBackground(BkgId id, Background *bkg);
+void loadBackground(BkgId id, const Background *bkg);
 
-void loadTileMap(BkgId bkg, TileMap map);
+void loadTileMap(BkgId bkg, const TileMap map);
 
-void setTileData(BkgId bkg, TileId id, Tile tile);
+void setTileData(BkgId bkg, TileId id, const Tile tile);
 
 void setScreenEntry(BkgId bkg, Position pos, TileId tile);
 

@@ -36,7 +36,7 @@ void loadColorPalette(ColorPalette palette) {
 	}
 }
 
-void loadBackground(BkgId bkgId, Background *bkg) {
+void loadBackground(BkgId bkgId, const Background *bkg) {
 	if(bkgId >= 4) {
 		return;
 	}
@@ -68,7 +68,7 @@ void loadBackground(BkgId bkgId, Background *bkg) {
 	}
 }
 
-void loadTileMap(BkgId bkgId, TileMap map) {
+void loadTileMap(BkgId bkgId, const TileMap map) {
 	if(bkgId >= 4) {
 		return;
 	}
@@ -77,16 +77,16 @@ void loadTileMap(BkgId bkgId, TileMap map) {
 	}
 }
 
-void setTileData(BkgId bkgId, TileId tileId, Tile src) {
+void setTileData(BkgId bkgId, TileId tileId, const Tile src) {
 	if(bkgId >= 4) {
 		return;
 	}
 
 	Background *bkg = &Backgrounds[bkgId];
 
-	Tile *dest = &(CharacterBaseBlocks[bkg->characterBaseBlock][tileId]);
-	for(int i=0; i<sizeof(Tile); i++) {
-		(*dest)[i] = src[i];
+	unsigned short *dest = (unsigned short *) (CharacterBaseBlocks[bkg->characterBaseBlock][tileId]);
+	for(int i=0; i<sizeof(Tile); i += 2) {
+		dest[ ( i >> 1 ) ] = ( src[i + 1] << 8 ) | src[i];
 	}
 }
 
