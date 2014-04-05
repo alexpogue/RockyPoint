@@ -92,6 +92,7 @@ void endTurn(){
 		CurState = GAME_OVER;
 	}
 }
+
 void moveZombie(Entity z){
 	int r = rand()%4;
 	Position p = z->position;
