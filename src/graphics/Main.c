@@ -3,6 +3,7 @@
 #include "logic/Game.h"
 #include "graphics/ColorPalette.h"
 #include "graphics/Background.h"
+#include "graphics/KeyManager.h"
 
 #define TRUE  1
 #define FALSE 0
@@ -48,6 +49,16 @@ void sleep(int);
 
 int main();
 
+void onKeyPress(KEY k) {
+	Position p = { k, 0 };
+	setScreenEntry(BKG0, p, 2);
+}
+
+void onKeyRelease(KEY k) {
+	Position p = { k, 0 };
+	setScreenEntry(BKG0, p, 1);
+}
+
 void clearScreen() {
 	int x, y;
 	for(x = 0; x < NUM_COLS; x++) {
@@ -74,12 +85,17 @@ int main() {
 	loadColorPalette(COLOR_PALETTE);
 	loadTileMap(BKG0, CHARACTER_BASE_BLOCK);
 
-	Position p = { 0, 1 };
-	setScreenEntry(BKG0, p, 1);
-	p = (Position) { 1, 0 };
-	setScreenEntry(BKG0, p, 2);
+	KeyHandler handler;
+	handler.onKeyPressed = onKeyPress;
+	handler.onKeyReleased = onKeyRelease;
+	handler.onKeyRepeat = 0;
+	for(KEY i = 0; i <= MAX_KEY; i++) {
+		setKeyHandler(i, &handler);
+	}
 
-	while(true) {};
+	while(true) {
+		processKeys();
+	}
 }
 
 void pollKeys() {
