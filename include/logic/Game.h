@@ -13,7 +13,8 @@ void initializeGame();
 Entity getEntityAt(Position);
 
 bool move(Entity, Position);
-void endTurn();
+bool shoot(Entity shooter, Position target);
 
+void endTurn();
 
 #endif
