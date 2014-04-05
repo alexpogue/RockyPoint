@@ -21,6 +21,8 @@ int main();
 
 void handleDPADEvents(KeyEvent);
 void handleKeyA(KeyEvent);
+void handleKeyB(KeyEvent);
+void handleKeyStart(KeyEvent);
 
 void validateCursor();
 
@@ -47,6 +49,8 @@ int main() {
 		setKeyHandler(i, handleDPADEvents);
 	}
 	setKeyHandler(KEY_A, handleKeyA);
+	setKeyHandler(KEY_B, handleKeyB);
+	setKeyHandler(KEY_START, handleKeyStart);
 
 	initializeGame();
 
@@ -67,7 +71,7 @@ int main() {
 			IsScreenDirty = false;
 		}
 
-		sleep(8);
+		sleep(7);
 	}
 }
 
@@ -117,6 +121,26 @@ void handleKeyA(KeyEvent event) {
 	}
 }
 
+void handleKeyB(KeyEvent event) {
+	if(event.state != KEY_STATE_PRESS) {
+		return;
+	}
+
+	if(SelectedEntity) {
+		SelectedEntity = NULL;
+		IsScreenDirty = true;
+	}
+}
+
+void handleKeyStart(KeyEvent event) {
+	if(event.state != KEY_STATE_PRESS) {
+		return;
+	}
+
+	endTurn();
+	IsScreenDirty = true;
+}
+
 void validateCursor() {
 	if (CurrCursorPosition.x >= GRID_WIDTH) {
 		CurrCursorPosition.x = PrevCursorPosition.x;
@@ -139,10 +163,7 @@ void drawScreen() {
 			} else {
 				setScreenEntry(BKG1, p, 0);
 			}
-
-			if(p.x != PrevCursorPosition.x || p.y != PrevCursorPosition.y) {
-				setScreenEntry(BKG0, p, 1);
-			}
+			setScreenEntry(BKG0, p, 1);
 		}
 	}
 
@@ -163,11 +184,10 @@ void drawScreen() {
 					continue;
 				}
 
-				if(p.x != ePosition.x || p.y != ePosition.y) {
-					setScreenEntry(BKG0, p, getScreenEntry(BKG0, p) + 2);
-				}
+				setScreenEntry(BKG0, p, 3);
 			}
 		}
-		setScreenEntry(BKG0, ePosition, getScreenEntry(BKG0, ePosition) + 2);
 	}
+
+	setScreenEntry(BKG0, PrevCursorPosition, getScreenEntry(BKG0, PrevCursorPosition) + 1);
 }
