@@ -24,4 +24,6 @@ bool shoot(Entity shooter, Position target);
 
 void endTurn();
 
+int score;
+
 #endif

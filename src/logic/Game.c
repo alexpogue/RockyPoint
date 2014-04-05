@@ -13,7 +13,7 @@ Entity createZombie(Position p);
 Entity createSurvivor(Position p);
 bool addNewZombie();
 bool addNewSurvivor();
-
+int score;
 GameState getGameState() {
 	return CurState;
 }
@@ -34,6 +34,7 @@ void initializeGame(){
 		addNewZombie();
 	}
 
+	score = 0;
 
 	grid[15][10] = createSurvivor((Position) { 15 ,10 });
 	CurState = GAME_RUNNING;
@@ -125,6 +126,7 @@ void moveZombie(Entity z){
 			if(target->remainingHealth == 0) {
 				// Convert the heretics
 				NumSurvivors--;
+				score -= 3;
 				target->type = ET_ZOMBIE;
 			}
 		}
@@ -174,11 +176,12 @@ bool shoot(Entity shooter, Position shotAt){
 		if(shooter->remainingPoints > 0){
 
 			//if the random number is greater than the number of moves, the shot hits
-			if(rand()%50 > calculateDistance(shooter->position, shotAt)){
+			unsigned int distance = calculateDistance(shooter->position, shotAt);
+			if(rand()%50 > distance){
 				//hit
 				Entity e = grid[shotAt.x][shotAt.y];
 				grid[shotAt.x][shotAt.y] = NULL;
-
+				score++;
 				freeEntity(e);
 			}
 			else{
