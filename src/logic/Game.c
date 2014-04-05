@@ -4,7 +4,7 @@
 #include "logic/EntityPool.h"
 
 Entity grid[GRID_WIDTH][GRID_HEIGHT];
-unsigned int calculateNumMoves(Position, Position, ActionPoint);
+unsigned int calculateDistance(Position, Position);
 void moveZombie(Entity);
 Entity createZombie(Position p);
 Entity createSurvivor(Position p);
@@ -35,7 +35,7 @@ Entity getEntityAt(Position p){
 	return grid[p.x][p.y];
 }
 bool move(Entity c, Position p){
-	unsigned int numMoves = calculateNumMoves(c->position,p, c->remainingPoints);
+	unsigned int numMoves = calculateDistance(c->position, p);
 	if(c->remainingPoints >= numMoves){
 		if(NULL == grid[p.x][p.y]){
 			grid[p.x][p.y] = c;
@@ -53,7 +53,7 @@ bool move(Entity c, Position p){
 	}
 }
 
-unsigned int calculateNumMoves(Position c, Position p, ActionPoint a){
+unsigned int calculateDistance(Position c, Position p){
 	return abs(c.x - p.x) + abs(c.y - p.y);
 }
 
@@ -77,26 +77,80 @@ void endTurn(){
 void moveZombie(Entity z){
 	int r = rand()%4;
 	Position p = z->position;
-	if(r == 0){
-		p.x--;
+
+	Entity target = NULL;
+	for(signed int x = ( (signed int) p.x ) - 3; x <= ( (signed int) p.x ) + 3; x++) {
+		if(x < 0 || x >= GRID_WIDTH) {
+			continue;
+		}
+		for(signed int y = ( (signed int) p.y ) - 3; y <= ( (signed int) p.y ) + 3; y++) {
+			if(y < 0 || y >=  GRID_HEIGHT) {
+				continue;
+			}
+
+			Entity e = getEntityAt((Position) { (unsigned int) x, (unsigned int) y });
+			if(e && getType(e) == ET_SURVIVOR) {
+				if(target) {
+					Position o = getPosition(target);
+					Position u = getPosition(e);
+
+					if(calculateDistance(p, u) < calculateDistance(p, o)) {
+						target = e;
+					}
+				}
+				else {
+					target = e;
+				}
+			}
+		}
 	}
-	else if(r==1){
-		p.y++;
+	if(target) {
+		Position o = getPosition(target);
+		if(calculateDistance(p, o) == 1) {
+			// Attack
+			target->remainingHealth--;
+			if(target->remainingHealth == 0) {
+				// Kill
+				grid[o.x][o.y] = NULL;
+				freeEntity(target);
+				p = o;
+			}
+		}
+		else if(o.y < p.y) {
+			p.y--;
+		}
+		else if(o.y > p.y) {
+			p.y++;
+		}
+		else if(o.x < p.x) {
+			p.x--;
+		}
+		else if(o.x > p.x) {
+			p.x++;
+		}
 	}
-	else if(r==2){
-		p.x++;
-	}
-	else{
-		p.y--;
-	}
+	else {
+		if(r == 0){
+			p.x--;
+		}
+		else if(r==1){
+			p.y++;
+		}
+		else if(r==2){
+			p.x++;
+		}
+		else{
+			p.y--;
+		}
 
 
-	if(p.x >= GRID_WIDTH){
-		p.x = z->position.x;;
-	}
+		if(p.x >= GRID_WIDTH){
+			p.x = z->position.x;;
+		}
 
-	if(p.y >= GRID_HEIGHT){
-		p.y = z->position.y;
+		if(p.y >= GRID_HEIGHT){
+			p.y = z->position.y;
+		}
 	}
 
 	if(z->position.x != p.x || z->position.y != p.y) {
@@ -108,7 +162,7 @@ bool shoot(Entity shooter, Position shotAt){
 		if(shooter->remainingPoints > 0){
 
 			//if the random number is greater than the number of moves, the shot hits
-			if(rand()%50 > calculateNumMoves(shooter->position, shotAt, 50)){
+			if(rand()%50 > calculateDistance(shooter->position, shotAt)){
 				//hit
 				Entity e = grid[shotAt.x][shotAt.y];
 				grid[shotAt.x][shotAt.y] = NULL;

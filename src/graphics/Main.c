@@ -144,6 +144,9 @@ void handleKeyStart(KeyEvent event) {
 	}
 
 	endTurn();
+	if(getType(SelectedEntity) == ET_INVALID) {
+		SelectedEntity = NULL;
+	}
 	IsScreenDirty = true;
 }
 
