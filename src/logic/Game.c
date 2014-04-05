@@ -1,4 +1,5 @@
 #include <stddef.h>
+#include <stdlib.h>
 #include "logic/Game.h"
 #include "logic/EntityPool.h"
 

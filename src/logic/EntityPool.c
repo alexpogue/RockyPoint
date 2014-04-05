@@ -10,7 +10,7 @@
 #include "logic/EntityPool.h"
 #include "logic/Game.h"
 
-const ActionPoint MAX_ACTION_POINTS[MAX_ENTITY_TYPE + 1];
+ActionPoint MAX_ACTION_POINTS[MAX_ENTITY_TYPE + 1];
 
 union Node_t {
 	struct Entity_t USED;
