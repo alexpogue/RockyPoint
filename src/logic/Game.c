@@ -8,7 +8,6 @@ unsigned int calculateNumMoves(Position, Position, ActionPoint);
 void moveZombie(Entity);
 Entity createZombie(Position p);
 Entity createSurvivor(Position p);
-Position createPosition(unsigned int x,unsigned int y);
 bool addNewZombie();
 
 
@@ -28,8 +27,10 @@ void initializeGame(){
 		addNewZombie();
 	}
 
+	grid[15][15] = createZombie((Position) { 15, 15 });
 
-	grid[0][0] = createSurvivor(createPosition(0,0));
+
+	grid[0][0] = createSurvivor((Position) { 0 ,0 });
 
 }
 Entity getEntityAt(Position p){
@@ -120,7 +121,7 @@ bool shoot(Entity shooter, Position shotAt){
 	}
 }
 bool addNewZombie(){
-	Position p = createPosition(rand()*30>>15, rand()*20>>15);
+	Position p = { rand()*30>>15, rand()*20>>15 };
 
 	if(getEntityAt(p) == NULL){
 		grid[p.x][p.y] = createZombie(p);
@@ -145,10 +146,4 @@ Entity createSurvivor(Position p){
 		survivor->remainingPoints = MAX_ACTION_POINTS[survivor->type];
 		survivor->position = p;
 		return survivor;
-}
-Position createPosition(unsigned int x,unsigned int y){
-	Position p;
-	p.x = x;
-	p.y = y;
-	return p;
 }
