@@ -14,11 +14,19 @@ Position createPosition(unsigned int x,unsigned int y);
 void initializeGame(){
 	initializePool();
 	int unsigned i, j;
+
+	//initialize grid
 	for(i = 0; i < GRID_WIDTH;i++){
 		for(j =0; j < GRID_HEIGHT;j++){
 			grid[i][j] = NULL;
 		}
 	}
+
+	//put some zombies in
+	for(i=0; i < 15; i++){
+		addZombie();
+	}
+
 
 	grid[0][0] = createSurvivor(createPosition(0,0));
 
@@ -129,7 +137,17 @@ bool shoot(Entity shooter, Position shotAt){
 		return false;
 	}
 }
+bool addNewZombie(){
+	Position p = createPosition(rand()*30>>15, rand()*20>>15);
 
+	if(getEntityAt(p) == NULL){
+		grid[p.x][p.y] = createZombie(p);
+		return true;
+	}
+	else{
+		return false;
+	}
+}
 Entity createZomibe(Position p){
 	Entity zombie;
 	zombie->remainingHealth = 1;
