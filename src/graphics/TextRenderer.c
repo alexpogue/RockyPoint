@@ -61,10 +61,16 @@ void printInt(Position at, int val) {
 	int right = 0;
 	int left = 0;
 
-	for(right = 0; val != 0; val /= 10, right++) {
-		buf[right] = ( val % 10 ) + '0';
+	if(val != 0) {
+		for(right = 0; val != 0; val /= 10, right++) {
+			buf[right] = ( val % 10 ) + '0';
+		}
 	}
-	buf[right + 1] = '\0';
+	else {
+		buf[right++] = '0';
+	}
+	buf[right] = '\0';
+	right--;
 
 	while(left < right) {
 		char t = buf[left];
