@@ -47,6 +47,9 @@ void printStr(Position at, char *str) {
 		else if( *str >= '0' && *str <= '9' ) {
 			offset = *str - '0' + 26;
 		}
+		else if( *str == '-' ) {
+			offset = 26 + 10;
+		}
 		if(offset != -1) {
 			setScreenEntry(BKG2, at, FIRST_CHARACTER_INDEX + offset);
 		}
@@ -60,6 +63,14 @@ void printInt(Position at, int val) {
 	char buf[34];
 	int right = 0;
 	int left = 0;
+
+	if(val < 0) {
+		buf[left] = '-';
+		left++;
+		right++;
+
+		val = -val;
+	}
 
 	if(val != 0) {
 		for(right = 0; val != 0; val /= 10, right++) {
