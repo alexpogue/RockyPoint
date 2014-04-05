@@ -6,6 +6,10 @@
 Entity grid[GRID_WIDTH][GRID_HEIGHT];
 unsigned int calculateNumMoves(Position, Position, ActionPoint);
 void moveZombie(Entity);
+Entity createZomibe(Position p);
+Entity createSurvivor(Position p);
+Position createPosition(unsigned int x,unsigned int y);
+
 
 void initializeGame(){
 	initializePool();
@@ -15,6 +19,7 @@ void initializeGame(){
 			grid[i][j] = NULL;
 		}
 	}
+	grid[0][0] = createSurvivor(createPosition(0,0));
 
 }
 Entity getEntityAt(Position p){
@@ -59,7 +64,7 @@ unsigned int calculateNumMoves(Position c, Position p, ActionPoint a){
 			i++;
 		}
 		else{
-			//Not supposed to happen
+			//Not supposed to happen ;)
 		}
 	}
 	return i;
@@ -81,7 +86,7 @@ void endTurn(){
 		}
 	}
 
-}///
+}
 void moveZombie(Entity z){
 	int r = rand()*4>>15;
 	Position p = z->position;
@@ -98,4 +103,26 @@ void moveZombie(Entity z){
 		p.y--;
 	}
 	move(z,p);
+}
+Entity createZomibe(Position p){
+	Entity zombie;
+	zombie->remainingHealth = 1;
+	zombie->type = ET_ZOMBIE;
+	zombie->remainingPoints = MAX_ACTION_POINTS[zombie->type];
+	zombie->position = p;
+	return zombie;
+}
+Entity createSurvivor(Position p){
+		Entity survivor;
+		survivor->remainingHealth = 1;
+		survivor->type = ET_SURVIVOR;
+		survivor->remainingPoints = MAX_ACTION_POINTS[survivor->type];
+		survivor->position = p;
+		return survivor;
+}
+Position createPosition(unsigned int x,unsigned int y){
+	Position p;
+	p.x = x;
+	p.y = y;
+	return p;
 }
