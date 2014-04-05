@@ -97,11 +97,11 @@ void moveZombie(Entity z){
 	Position p = z->position;
 
 	Entity target = NULL;
-	for(signed int x = ( (signed int) p.x ) - 3; x <= ( (signed int) p.x ) + 3; x++) {
+	for(signed int x = ( (signed int) p.x ) - 5; x <= ( (signed int) p.x ) + 5; x++) {
 		if(x < 0 || x >= GRID_WIDTH) {
 			continue;
 		}
-		for(signed int y = ( (signed int) p.y ) - 3; y <= ( (signed int) p.y ) + 3; y++) {
+		for(signed int y = ( (signed int) p.y ) - 5; y <= ( (signed int) p.y ) + 5; y++) {
 			if(y < 0 || y >=  GRID_HEIGHT) {
 				continue;
 			}
@@ -181,7 +181,7 @@ bool shoot(Entity shooter, Position shotAt){
 
 			//if the random number is greater than the number of moves, the shot hits
 			unsigned int distance = calculateDistance(shooter->position, shotAt);
-			if((rand()%50) > distance + score*.2){
+			if((rand()%50) > distance + score*.1){
 				//hit
 				Entity e = grid[shotAt.x][shotAt.y];
 				grid[shotAt.x][shotAt.y] = NULL;
