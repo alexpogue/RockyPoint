@@ -7,6 +7,7 @@
 #include "graphics/ColorPalette.h"
 #include "graphics/Background.h"
 #include "graphics/KeyManager.h"
+#include "graphics/TextRenderer.h"
 
 bool IsScreenDirty = false;
 
@@ -31,6 +32,7 @@ void validateCursor();
 void drawScreen();
 
 int main() {
+	initializeCharacterLayer();
 	initializeGame();
 	while(true) {
 		Background bkgCnt;
@@ -190,6 +192,9 @@ void validateCursor() {
 
 void drawScreen() {
 	vsync();
+
+	clearCharacterLayer();
+
 	for (int x = 0; x < GRID_WIDTH; x++) {
 		for (int y = 0; y < GRID_HEIGHT; y++) {
 			Position p = { x, y };
