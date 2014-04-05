@@ -73,7 +73,7 @@ int main() {
 			IsScreenDirty = false;
 		}
 
-		getRandomNum();
+		rand();
 		sleep(7);
 	}
 }

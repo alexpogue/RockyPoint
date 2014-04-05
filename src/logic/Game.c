@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include "logic/Game.h"
 #include "logic/EntityPool.h"
-#include "logic/Random.h"
 
 Entity grid[GRID_WIDTH][GRID_HEIGHT];
 unsigned int calculateNumMoves(Position, Position, ActionPoint);
