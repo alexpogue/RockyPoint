@@ -86,6 +86,15 @@ int main() {
 		}
 
 		loadBackground(BKG1, NULL); // Unload front background
+		for(int x=0; x<GRID_WIDTH; x++) {
+			for(int y=0; y<GRID_HEIGHT; y++) {
+				setScreenEntry(BKG0, (Position) { x, y }, 7);
+			}
+		}
+
+		printStr((Position) { GRID_WIDTH / 2 - 4, GRID_HEIGHT / 2 - 5 }, "GAME OVER");
+		printStr((Position) { GRID_WIDTH / 2 - 8, GRID_HEIGHT / 2 + 0 }, "PRESS ANY BUTTON ");
+		printStr((Position) { GRID_WIDTH / 2 - 6, GRID_HEIGHT / 2 + 2 }, " TO TRY AGAIN");
 
 		while(getGameState() == GAME_OVER) {
 			processKeys();
@@ -194,6 +203,8 @@ void drawScreen() {
 	vsync();
 
 	clearCharacterLayer();
+	printStr((Position) { 0, GRID_HEIGHT - 1 }, "Score ");
+	printInt((Position) { 6, GRID_HEIGHT - 1 }, score);
 
 	for (int x = 0; x < GRID_WIDTH; x++) {
 		for (int y = 0; y < GRID_HEIGHT; y++) {
