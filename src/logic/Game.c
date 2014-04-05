@@ -47,7 +47,7 @@ bool move(Entity c, Position p){
 
 unsigned int calculateNumMoves(Position c, Position p, ActionPoint a){
 	unsigned int i = 0;
-	while((c.x != p.x && c.y != p.y)|| i > a){
+	while((c.x != p.x || c.y != p.y)|| i > a){
 		if(c.x < p.x){
 			c.x++;
 			i++;
@@ -105,6 +105,31 @@ void moveZombie(Entity z){
 	}
 	move(z,p);
 }
+bool shoot(Entity shooter, Position shotAt){
+	if(getEntityAt(shotAt)->type == ET_ZOMBIE){
+		if(shooter->remainingPoints > 0){
+
+			//if the random number is greater than the number of moves, the shot hits
+			if(rand()*50>>15 > calculaterNumMoves(shooter->position, shotAt, 50)){
+				//hit
+				grid[shotAt.x][shotAt.y] = NULL;
+			}
+			else{
+				//miss
+			}
+
+			shooter->remainingPoints -= 1;
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
+	else{
+		return false;
+	}
+}
+
 Entity createZomibe(Position p){
 	Entity zombie;
 	zombie->remainingHealth = 1;
