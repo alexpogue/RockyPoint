@@ -10,7 +10,7 @@
 
 #include "logic/Entity.h"
 
-typedef unsigned short ColorPalette[256];
+typedef const unsigned short ColorPalette[256];
 
 typedef unsigned short Tile[32];
 typedef Tile TileMap[256];
