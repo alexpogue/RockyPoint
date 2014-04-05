@@ -23,7 +23,7 @@ static const unsigned short COLOR_PALETTE[256] = {
 		  0x1176, /* hero hair light */
 		  0x3DEF, /* gray */
 		  0x0286, /* green */
-		  0x001F, /* red */
+		  0x0011, /* red */
 		  0x03FE, /* yellow */
 		  0x7C40, /* blue */
 		  0x0001, /* black */
