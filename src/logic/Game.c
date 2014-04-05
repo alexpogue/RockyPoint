@@ -19,6 +19,7 @@ void initializeGame(){
 			grid[i][j] = NULL;
 		}
 	}
+
 	grid[0][0] = createSurvivor(createPosition(0,0));
 
 }
