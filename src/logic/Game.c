@@ -99,7 +99,10 @@ bool shoot(Entity shooter, Position shotAt){
 			//if the random number is greater than the number of moves, the shot hits
 			if(rand()*50>>15 > calculateNumMoves(shooter->position, shotAt, 50)){
 				//hit
+				Entity e = grid[shotAt.x][shotAt.y];
 				grid[shotAt.x][shotAt.y] = NULL;
+
+				freeEntity(e);
 			}
 			else{
 				//miss
