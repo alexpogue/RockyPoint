@@ -54,29 +54,7 @@ bool move(Entity c, Position p){
 }
 
 unsigned int calculateNumMoves(Position c, Position p, ActionPoint a){
-	unsigned int i = 0;
-	while((c.x != p.x || c.y != p.y)|| i > a){
-		if(c.x < p.x){
-			c.x++;
-			i++;
-		}
-		else if(c.x > p.x){
-			c.x--;
-			i++;
-		}
-		else if(c.y < p.y){
-			c.y++;
-			i++;
-		}
-		else if(c.y > p.y){
-			c.y--;
-			i++;
-		}
-		else{
-			//Not supposed to happen
-		}
-	}
-	return i;
+	return abs(c.x - p.x) + abs(c.y - p.y);
 }
 
 
