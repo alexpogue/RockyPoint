@@ -35,14 +35,14 @@ int main() {
 	while(true) {
 		Background bkgCnt;
 		// for background layer
-		bkgCnt.priority = 1;
+		bkgCnt.priority = 3;
 		bkgCnt.colorMode = 1;
 		bkgCnt.characterBaseBlock = 0;
 		bkgCnt.screenBaseBlock = 8;
 		loadBackground(BKG0, &bkgCnt);
 
 		// for sprite layer
-		bkgCnt.priority = 0;
+		bkgCnt.priority = 2;
 		bkgCnt.screenBaseBlock = 9;
 		loadBackground(BKG1, &bkgCnt);
 
