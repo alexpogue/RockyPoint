@@ -85,7 +85,7 @@ void endTurn(){
 	for(i = 0; i < 1+spawns ; i++){
 		addNewZombie();
 	}
-	if(rand()%100 > 95){
+	if(rand()%100 > 90){
 		addNewSurvivor();
 	}
 	if(NumSurvivors == 0) {
