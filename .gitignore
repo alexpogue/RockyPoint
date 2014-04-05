@@ -1,2 +1,7 @@
+/emulator/*
+/toolchain/*
 /bin/*
 /build/*
+.settings/*
+.cproject
+.project
