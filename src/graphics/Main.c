@@ -3,6 +3,7 @@
 #include <stdlib.h>
 
 #include "logic/Game.h"
+#include "logic/Random.h"
 
 #include "graphics/ColorPalette.h"
 #include "graphics/Background.h"
@@ -73,6 +74,7 @@ int main() {
 			IsScreenDirty = false;
 		}
 
+		getRandomNum();
 		sleep(7);
 	}
 }
